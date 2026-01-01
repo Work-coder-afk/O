@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Sparx Maths</title>
+
+<style>
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #0f172a;
+  color: white;
+  text-align: center;
+}
+
+.box {
+  background: #020617;
+  width: 320px;
+  margin: 120px auto;
+  padding: 25px;
+  border-radius: 12px;
+}
+
+input, button {
+  width: 90%;
+  padding: 10px;
+  margin-top: 10px;
+  border-radius: 6px;
+  border: none;
+  font-size: 16px;
+}
+
+button {
+  background: #22c55e;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+header {
+  background: #020617;
+  padding: 20px;
+  font-size: 26px;
+  display: none;
+}
+
+.tabs {
+  display: none;
+  justify-content: center;
+  background: #020617;
+}
+
+.tab {
+  padding: 15px 25px;
+  cursor: pointer;
+}
+
+.tab.active {
+  border-bottom: 3px solid #22c55e;
+}
+
+.content {
+  display: none;
+  padding: 20px;
+}
+
+.symbol {
+  font-size: 80px;
+  margin: 20px;
+  cursor: pointer;
+  display: inline-block;
+  user-select: none;
+  transition: transform .2s, opacity .2s;
+}
+
+.symbol:hover {
+  transform: scale(1.15);
+  opacity: .85;
+}
+
+#iframe-container {
+  display: none;
+  width: 95%;
+  height: 75vh;
+  margin: 20px auto;
+  border: 3px solid #22c55e;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+}
+
+#loading {
+  position: fixed;
+  inset: 0;
+  background: #020617;
+  display: none;
+  z-index: 9999;
+  padding-top: 120px;
+}
+
+.loader {
+  border: 6px solid #1e293b;
+  border-top: 6px solid #22c55e;
+  border-radius: 50%;
+  width: 60px;
+  height: 60px;
+  margin: 25px auto;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.fake-question {
+  font-size: 18px;
+  opacity: .9;
+}
+</style>
+</head>
+
+<body>
+
+<div class="box" id="login">
+  <h1>Sparx Maths</h1>
+  <p>Please complete your homework</p>
+  <input type="password" id="password" placeholder="Enter homework code">
+  <button onclick="unlock()">Submit</button>
+</div>
+
+<header id="site">Sparx Maths</header>
+
+<div class="tabs" id="tabs">
+  <div class="tab active" onclick="openTab('algebra', this)">Algebra</div>
+  <div class="tab" onclick="openTab('practice', this)">Practice</div>
+  <div class="tab" onclick="openTab('sigma', this)">Σ</div>
+</div>
+
+<!-- ALGEBRA -->
+<div id="algebra" class="content" style="display:block;">
+  <div class="symbol" onclick="loadGame('https://playtetris.org/')">+</div>
+  <div class="symbol" onclick="loadGame('https://sites.google.com/view/classroom6x/1v1-lol')">÷</div>
+  <div class="symbol" onclick="loadGame('https://sites.google.com/view/classroom6x/retro-bowl')">−</div>
+  <div class="symbol" onclick="loadGame('https://sites.google.com/view/classroom6x/pacman')">★</div>
+</div>
+
+<!-- PRACTICE -->
+<div id="practice" class="content">
+  <div class="symbol" onclick="loadGame('https://sites.google.com/view/classroom6x/slope')">×</div>
+  <div class="symbol" onclick="loadGame('https://sites.google.com/view/classroom6x/run-3')">√</div>
+  <div class="symbol" onclick="loadGame('https://sites.google.com/view/classroom6x/drift-hunters')">≈</div>
+  <div class="symbol" onclick="loadGame('https://sites.google.com/view/classroom6x/geometry-dash')">◇</div>
+</div>
+
+<!-- SIGMA -->
+<div id="sigma" class="content">
+  <div class="symbol" onclick="loadGame('https://sites.google.com/view/classroom6x/moto-x3m')">π</div>
+  <div class="symbol" onclick="loadGame('https://sites.google.com/view/classroom6x/bitlife')">Σ</div>
+  <div class="symbol" onclick="loadGame('https://sites.google.com/view/classroom6x/minesweeper')">☼</div>
+</div>
+
+<div id="iframe-container">
+  <iframe id="game-frame"></iframe>
+</div>
+
+<div id="loading">
+  <h2>Solving questions…</h2>
+  <div class="loader"></div>
+  <p class="fake-question" id="question"></p>
+</div>
+
+<script>
+let timer;
+
+const questions = [
+  "Calculate: 7 × (3 + 5)",
+  "Find x: 2x + 6 = 14",
+  "Simplify: 4² + 3²",
+  "Solve: 12 ÷ 3 × 2",
+  "Evaluate when x = 4: x² − 2x",
+  "Factor: x^2 + 5x + 6",
+  "Calculate: 15 ÷ 3 + 2",
+  "Solve: 7x - 14 = 0",
+  "Simplify: 10 ÷ (2 + 3)",
+  "What is the square root of 144?"
+];
+
+function unlock() {
+  if (password.value === "sparx") {
+    login.style.display = "none";
+    site.style.display = "block";
+    tabs.style.display = "flex";
+  } else {
+    alert("Incorrect homework code");
+  }
+}
+
+function openTab(id, el) {
+  document.querySelectorAll('.content').forEach(c => c.style.display = 'none');
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById(id).style.display = 'block';
+  el.classList.add('active');
+  iframeContainer.style.display = "none";
+  gameFrame.src = "";
+}
+
+function loadGame(url) {
+  question.textContent = questions[Math.floor(Math.random() * questions.length)];
+  loading.style.display = "block";
+
+  timer = setTimeout(() => {
+    loading.style.display = "none";
+    iframeContainer.style.display = "block";
+    gameFrame.src = url;
+  }, 1800);
+}
+
+function panic() {
+  window.location.href = "https://www.sparxmaths.uk/";
+}
+
+document.addEventListener("keydown", e => {
+  if (e.key.toLowerCase() === "x") panic();
+  if (e.key === "Enter" && loading.style.display === "block") {
+    clearTimeout(timer);
+    loading.style.display = "none";
+  }
+});
+
+password.addEventListener("keydown", e => {
+  if (e.key === "Enter") unlock();
+});
+</script>
+
+</body>
+</html>
