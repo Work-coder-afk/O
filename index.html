@@ -63,36 +63,29 @@ header {
   padding: 20px;
 }
 
+/* SYMBOL BUTTONS */
 .symbol {
-  font-size: 80px;
-  margin: 20px;
+  font-size: 60px;
+  margin: 25px;
   cursor: pointer;
   display: inline-block;
   user-select: none;
-  transition: transform .2s, opacity .2s;
+  transition: transform 0.2s, opacity 0.2s;
 }
 
 .symbol:hover {
-  transform: scale(1.15);
-  opacity: .85;
+  transform: scale(1.2);
+  opacity: 0.8;
 }
 
-#iframe-container {
-  display: none;
-  width: 95%;
-  height: 75vh;
-  margin: 20px auto;
-  border: 3px solid #22c55e;
-  border-radius: 12px;
-  overflow: hidden;
-}
-
+/* GAME IFRAME */
 iframe {
   width: 100%;
-  height: 100%;
+  height: 540px;
   border: none;
 }
 
+/* LOADING SCREEN */
 #loading {
   position: fixed;
   inset: 0;
@@ -108,23 +101,19 @@ iframe {
   border-radius: 50%;
   width: 60px;
   height: 60px;
-  margin: 25px auto;
+  margin: 30px auto;
   animation: spin 1s linear infinite;
 }
 
 @keyframes spin {
   to { transform: rotate(360deg); }
 }
-
-.fake-question {
-  font-size: 18px;
-  opacity: .9;
-}
 </style>
 </head>
 
 <body>
 
+<!-- LOGIN -->
 <div class="box" id="login">
   <h1>Sparx Maths</h1>
   <p>Please complete your homework</p>
@@ -132,6 +121,7 @@ iframe {
   <button onclick="unlock()">Submit</button>
 </div>
 
+<!-- MAIN -->
 <header id="site">Sparx Maths</header>
 
 <div class="tabs" id="tabs">
@@ -142,90 +132,86 @@ iframe {
 
 <!-- ALGEBRA -->
 <div id="algebra" class="content" style="display:block;">
-  <div class="symbol" onclick="loadGame('https://www.madkidgames.com/full/car-king-arena-2')">+</div>
-  <div class="symbol" onclick="loadGame('https://www.madkidgames.com/full/poly-track')">÷</div>
+  <div class="symbol" onclick="loadGame('poly-track')">🔢</div>
+  <div class="symbol" onclick="loadGame('1v1-lol')">÷</div>
 </div>
 
 <!-- PRACTICE -->
 <div id="practice" class="content">
-  <div class="symbol" onclick="loadGame('https://www.madkidgames.com/full/1v1-lol')">×</div>
-  <div class="symbol" onclick="loadGame('https://www.madkidgames.com/full/slope')">√</div>
+  <div class="symbol" onclick="loadGame('slope')">×</div>
+  <div class="symbol" onclick="loadGame('r-vs-b')">√</div>
 </div>
 
 <!-- SIGMA -->
 <div id="sigma" class="content">
-  <div class="symbol" onclick="loadGame('https://www.madkidgames.com/full/r-vs-b')">Σ</div>
+  <div class="symbol" onclick="loadGame('empty')">π</div>
 </div>
 
-<div id="iframe-container">
-  <iframe id="game-frame"></iframe>
+<!-- GAME IFRAME -->
+<div id="game-container" class="content">
+  <iframe id="game-frame" src=""></iframe>
 </div>
 
+<!-- FAKE LOADING -->
 <div id="loading">
-  <h2>Solving questions…</h2>
+  <h2>Loading questions…</h2>
   <div class="loader"></div>
-  <p class="fake-question" id="question"></p>
+  <p>Please wait</p>
 </div>
 
 <script>
-let timer;
+let redirectTimer = null;
 
-const questions = [
-  "Calculate: 7 × (3 + 5)",
-  "Find x: 2x + 6 = 14",
-  "Simplify: 4² + 3²",
-  "Solve: 12 ÷ 3 × 2",
-  "Evaluate when x = 4: x² − 2x",
-  "Factor: x^2 + 5x + 6",
-  "Calculate: 15 ÷ 3 + 2",
-  "Solve: 7x - 14 = 0",
-  "Simplify: 10 ÷ (2 + 3)",
-  "What is the square root of 144?"
-];
-
+/* LOGIN */
 function unlock() {
-  if (password.value === "Maths") {
-    login.style.display = "none";
-    site.style.display = "block";
-    tabs.style.display = "flex";
+  if (document.getElementById("password").value === "Maths") {
+    document.getElementById("login").style.display = "none";
+    document.getElementById("site").style.display = "block";
+    document.getElementById("tabs").style.display = "flex";
+    document.getElementById("algebra").style.display = "block";
   } else {
     alert("Incorrect homework code");
   }
 }
 
+/* TABS */
 function openTab(id, el) {
   document.querySelectorAll('.content').forEach(c => c.style.display = 'none');
   document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-  document.getElementById(id).style.display = 'block';
+  if(id !== 'game-container') document.getElementById(id).style.display = 'block';
   el.classList.add('active');
-  iframeContainer.style.display = "none";
-  gameFrame.src = "";
 }
 
-function loadGame(url) {
-  question.textContent = questions[Math.floor(Math.random() * questions.length)];
-  loading.style.display = "block";
-
-  timer = setTimeout(() => {
-    loading.style.display = "none";
-    iframeContainer.style.display = "block";
-    gameFrame.src = url;
-  }, 5000); // 5 seconds loading
+/* LOAD GAME IN IFRAME */
+function loadGame(game) {
+  let frame = document.getElementById("game-frame");
+  document.getElementById("game-container").style.display = "block";
+  
+  if(game === 'poly-track') frame.src = "https://www.madkidgames.com/full/poly-track";
+  if(game === '1v1-lol') frame.src = "https://www.madkidgames.com/full/1v1-lol";
+  if(game === 'slope') frame.src = "https://www.madkidgames.com/full/slope";
+  if(game === 'r-vs-b') frame.src = "https://www.madkidgames.com/full/r-vs-b";
+  
+  document.querySelectorAll('.content').forEach(c => {
+    if(c.id !== 'game-container') c.style.display = 'none';
+  });
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
 }
 
-function panic() {
-  window.location.href = "https://www.sparxmaths.uk/";
-}
-
+/* PANIC BUTTON = X */
 document.addEventListener("keydown", e => {
-  if (e.key.toLowerCase() === "x") panic();
-  if (e.key === "Enter" && loading.style.display === "block") {
-    clearTimeout(timer);
-    loading.style.display = "none";
+  if (e.key.toLowerCase() === "x") {
+    document.getElementById("game-container").style.display = "none";
+    document.querySelectorAll('.content').forEach(c => c.style.display = 'none');
+    document.getElementById("algebra").style.display = "block";
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    document.querySelector('.tab').classList.add('active');
+    document.getElementById("game-frame").src = "";
   }
 });
 
-password.addEventListener("keydown", e => {
+/* ENTER SUBMITS PASSWORD */
+document.getElementById("password").addEventListener("keydown", e => {
   if (e.key === "Enter") unlock();
 });
 </script>
