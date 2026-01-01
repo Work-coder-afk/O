@@ -63,7 +63,6 @@ header {
   padding: 20px;
 }
 
-/* SYMBOL BUTTONS */
 .symbol {
   font-size: 60px;
   margin: 25px;
@@ -78,7 +77,6 @@ header {
   opacity: 0.8;
 }
 
-/* GAME IFRAME */
 iframe {
   width: 100%;
   height: 540px;
@@ -86,7 +84,6 @@ iframe {
 }
 </style>
 </head>
-
 <body>
 
 <!-- LOGIN -->
@@ -94,7 +91,7 @@ iframe {
   <h1>Sparx Maths</h1>
   <p>Please complete your homework</p>
   <input type="password" id="password" placeholder="Enter homework code">
-  <button onclick="unlock()">Submit</button>
+  <button>Submit</button>
 </div>
 
 <!-- MAIN -->
@@ -123,43 +120,70 @@ iframe {
 </div>
 
 <script>
-/* LOGIN */
-function unlock() {
-  if (document.getElementById("password").value === "Maths") {
-    document.getElementById("login").style.display = "none";
-    document.getElementById("site").style.display = "block";
-    document.getElementById("tabs").style.display = "flex";
-    document.getElementById("algebra").style.display = "block";
-  } else {
-    alert("Incorrect homework code");
+document.addEventListener("DOMContentLoaded", () => {
+  const passwordInput = document.getElementById("password");
+  const loginBox = document.getElementById("login");
+  const siteHeader = document.getElementById("site");
+  const tabs = document.getElementById("tabs");
+  const algebraTab = document.getElementById("algebra");
+  const gameContainer = document.getElementById("game-container");
+  const gameFrame = document.getElementById("game-frame");
+  const tabElements = document.querySelectorAll('.tab');
+  const contentElements = document.querySelectorAll('.content');
+
+  // LOGIN FUNCTION
+  function unlock() {
+    if (passwordInput.value === "Maths") {
+      loginBox.style.display = "none";
+      siteHeader.style.display = "block";
+      tabs.style.display = "flex";
+      algebraTab.style.display = "block";
+    } else {
+      alert("Incorrect homework code");
+    }
   }
-}
 
-/* TABS */
-function openTab(id, el) {
-  document.querySelectorAll('.content').forEach(c => c.style.display = 'none');
-  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-  if(id !== 'game-container') document.getElementById(id).style.display = 'block';
-  el.classList.add('active');
-}
+  // TAB FUNCTION
+  window.openTab = function(id, el) {
+    contentElements.forEach(c => { if(c.id !== 'game-container') c.style.display = 'none'; });
+    tabElements.forEach(t => t.classList.remove('active'));
+    if(id !== 'game-container') document.getElementById(id).style.display = 'block';
+    el.classList.add('active');
+  }
 
-/* LOAD GAME IN IFRAME */
-function loadGame(game) {
-  let frame = document.getElementById("game-frame");
-  document.getElementById("game-container").style.display = "block";
-  
-  if(game === 'poly-track') frame.src = "https://www.madkidgames.com/full/poly-track";
-  if(game === '1v1-lol') frame.src = "https://www.madkidgames.com/full/1v1-lol";
-  if(game === 'slope') frame.src = "https://www.madkidgames.com/full/slope";
-  if(game === 'r-vs-b') frame.src = "https://www.madkidgames.com/full/r-vs-b";
-  
-  document.querySelectorAll('.content').forEach(c => {
-    if(c.id !== 'game-container') c.style.display = 'none';
+  // LOAD GAME FUNCTION
+  window.loadGame = function(game) {
+    gameContainer.style.display = "block";
+    if(game === 'poly-track') gameFrame.src = "https://www.madkidgames.com/full/poly-track";
+    if(game === '1v1-lol') gameFrame.src = "https://www.madkidgames.com/full/1v1-lol";
+    if(game === 'slope') gameFrame.src = "https://www.madkidgames.com/full/slope";
+    if(game === 'r-vs-b') gameFrame.src = "https://www.madkidgames.com/full/r-vs-b";
+
+    contentElements.forEach(c => { if(c.id !== 'game-container') c.style.display = 'none'; });
+    tabElements.forEach(t => t.classList.remove('active'));
+  }
+
+  // PANIC BUTTON = X
+  document.addEventListener("keydown", e => {
+    if(e.key.toLowerCase() === "x") {
+      gameContainer.style.display = "none";
+      contentElements.forEach(c => { if(c.id !== 'game-container') c.style.display = 'none'; });
+      algebraTab.style.display = "block";
+      tabElements.forEach(t => t.classList.remove('active'));
+      tabElements[0].classList.add('active');
+      gameFrame.src = "";
+    }
   });
-  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-}
 
-/* PANIC BUTTON = X */
-document.addEventListener("keydown", e => {
-  if (e.key.toLowerCase() === "x") {
-    document.getElementById("game-container").s
+  // ENTER SUBMITS PASSWORD
+  passwordInput.addEventListener("keydown", e => {
+    if(e.key === "Enter") unlock();
+  });
+
+  // BUTTON CLICK SUBMITS PASSWORD
+  document.querySelector("button").addEventListener("click", unlock);
+});
+</script>
+
+</body>
+</html>
