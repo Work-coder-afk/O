@@ -84,30 +84,6 @@ iframe {
   height: 540px;
   border: none;
 }
-
-/* LOADING SCREEN */
-#loading {
-  position: fixed;
-  inset: 0;
-  background: #020617;
-  display: none;
-  z-index: 9999;
-  padding-top: 120px;
-}
-
-.loader {
-  border: 6px solid #1e293b;
-  border-top: 6px solid #22c55e;
-  border-radius: 50%;
-  width: 60px;
-  height: 60px;
-  margin: 30px auto;
-  animation: spin 1s linear infinite;
-}
-
-@keyframes spin {
-  to { transform: rotate(360deg); }
-}
 </style>
 </head>
 
@@ -127,7 +103,6 @@ iframe {
 <div class="tabs" id="tabs">
   <div class="tab active" onclick="openTab('algebra', this)">Algebra</div>
   <div class="tab" onclick="openTab('practice', this)">Practice</div>
-  <div class="tab" onclick="openTab('sigma', this)">Σ</div>
 </div>
 
 <!-- ALGEBRA -->
@@ -142,26 +117,12 @@ iframe {
   <div class="symbol" onclick="loadGame('r-vs-b')">√</div>
 </div>
 
-<!-- SIGMA -->
-<div id="sigma" class="content">
-  <div class="symbol" onclick="loadGame('empty')">π</div>
-</div>
-
 <!-- GAME IFRAME -->
 <div id="game-container" class="content">
   <iframe id="game-frame" src=""></iframe>
 </div>
 
-<!-- FAKE LOADING -->
-<div id="loading">
-  <h2>Loading questions…</h2>
-  <div class="loader"></div>
-  <p>Please wait</p>
-</div>
-
 <script>
-let redirectTimer = null;
-
 /* LOGIN */
 function unlock() {
   if (document.getElementById("password").value === "Maths") {
@@ -201,20 +162,4 @@ function loadGame(game) {
 /* PANIC BUTTON = X */
 document.addEventListener("keydown", e => {
   if (e.key.toLowerCase() === "x") {
-    document.getElementById("game-container").style.display = "none";
-    document.querySelectorAll('.content').forEach(c => c.style.display = 'none');
-    document.getElementById("algebra").style.display = "block";
-    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-    document.querySelector('.tab').classList.add('active');
-    document.getElementById("game-frame").src = "";
-  }
-});
-
-/* ENTER SUBMITS PASSWORD */
-document.getElementById("password").addEventListener("keydown", e => {
-  if (e.key === "Enter") unlock();
-});
-</script>
-
-</body>
-</html>
+    document.getElementById("game-container").s
