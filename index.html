@@ -120,16 +120,13 @@ iframe {
 </div>
 
 <script>
-document.addEventListener("DOMContentLoaded", () => {
-  const passwordInput = document.getElementById("password");
-  const loginBox = document.getElementById("login");
-  const siteHeader = document.getElementById("site");
-  const tabs = document.getElementById("tabs");
-  const algebraTab = document.getElementById("algebra");
-  const gameContainer = document.getElementById("game-container");
-  const gameFrame = document.getElementById("game-frame");
-  const tabElements = document.querySelectorAll('.tab');
-  const contentElements = document.querySelectorAll('.content');
+document.addEventListener("keydown", e => {
+  if(e.key.toLowerCase() === "x") {
+    // Redirect to Sparx Maths website
+    window.location.href = "https://www.sparxmaths.uk/";
+  }
+});
+
 
   // LOGIN FUNCTION
   function unlock() {
