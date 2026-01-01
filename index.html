@@ -190,7 +190,7 @@ const questions = [
 ];
 
 function unlock() {
-  if (password.value === "sparx") {
+  if (password.value === "Maths") {
     login.style.display = "none";
     site.style.display = "block";
     tabs.style.display = "flex";
@@ -224,7 +224,7 @@ function panic() {
 }
 
 document.addEventListener("keydown", e => {
-  if (e.key.toLowerCase() === "x") panic();
+  if (e.key.toLowerCase() === "/") panic();
   if (e.key === "Enter" && loading.style.display === "block") {
     clearTimeout(timer);
     loading.style.display = "none";
