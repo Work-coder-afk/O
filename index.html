@@ -120,13 +120,16 @@ iframe {
 </div>
 
 <script>
-document.addEventListener("keydown", e => {
-  if(e.key.toLowerCase() === "x") {
-    // Redirect to Sparx Maths website
-    window.location.href = "https://www.sparxmaths.uk/";
-  }
-});
-
+document.addEventListener("DOMContentLoaded", () => {
+  const passwordInput = document.getElementById("password");
+  const loginBox = document.getElementById("login");
+  const siteHeader = document.getElementById("site");
+  const tabs = document.getElementById("tabs");
+  const algebraTab = document.getElementById("algebra");
+  const gameContainer = document.getElementById("game-container");
+  const gameFrame = document.getElementById("game-frame");
+  const tabElements = document.querySelectorAll('.tab');
+  const contentElements = document.querySelectorAll('.content');
 
   // LOGIN FUNCTION
   function unlock() {
@@ -160,15 +163,10 @@ document.addEventListener("keydown", e => {
     tabElements.forEach(t => t.classList.remove('active'));
   }
 
-  // PANIC BUTTON = X
+  // PANIC BUTTON = X → redirect to real Sparx Maths
   document.addEventListener("keydown", e => {
     if(e.key.toLowerCase() === "x") {
-      gameContainer.style.display = "none";
-      contentElements.forEach(c => { if(c.id !== 'game-container') c.style.display = 'none'; });
-      algebraTab.style.display = "block";
-      tabElements.forEach(t => t.classList.remove('active'));
-      tabElements[0].classList.add('active');
-      gameFrame.src = "";
+      window.location.href = "https://www.sparxmaths.uk/";
     }
   });
 
