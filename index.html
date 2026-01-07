@@ -13,12 +13,22 @@ body {
   text-align: center;
 }
 
+/* LOGIN */
+#login {
+  position: fixed;
+  inset: 0;
+  background: #0f172a;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+
 .box {
   background: #020617;
-  width: 320px;
-  margin: 120px auto;
-  padding: 25px;
+  padding: 30px;
   border-radius: 12px;
+  width: 320px;
 }
 
 input, button {
@@ -36,15 +46,19 @@ button {
   cursor: pointer;
 }
 
-header {
-  background: #020617;
-  padding: 20px;
-  font-size: 26px;
+/* MAIN SITE */
+#site {
   display: none;
 }
 
+header {
+  background: #020617;
+  padding: 20px;
+  font-size: 24px;
+}
+
 .tabs {
-  display: none;
+  display: flex;
   justify-content: center;
   background: #020617;
 }
@@ -60,45 +74,31 @@ header {
 
 .content {
   display: none;
-  padding: 40px;
+  padding: 30px;
 }
 
-/* SYMBOLS */
-.symbol {
-  font-size: 80px;
-  margin: 20px;
-  cursor: pointer;
-  display: inline-block;
-  user-select: none;
-  transition: transform 0.2s, opacity 0.2s;
-}
-.symbol:hover {
-  transform: scale(1.2);
-  opacity: 0.8;
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 20px;
+  max-width: 700px;
+  margin: auto;
 }
 
-/* FAKE LOADING */
-#loading {
-  position: fixed;
-  inset: 0;
+.game {
   background: #020617;
-  display: none;
-  z-index: 9999;
-  padding-top: 120px;
+  padding: 20px;
+  border-radius: 10px;
+  cursor: pointer;
 }
 
-.loader {
-  border: 6px solid #1e293b;
-  border-top: 6px solid #22c55e;
-  border-radius: 50%;
+.game img {
   width: 60px;
-  height: 60px;
-  margin: 30px auto;
-  animation: spin 1s linear infinite;
 }
 
-@keyframes spin {
-  to { transform: rotate(360deg); }
+.game p {
+  margin-top: 10px;
+  font-size: 16px;
 }
 </style>
 </head>
@@ -106,91 +106,140 @@ header {
 <body>
 
 <!-- LOGIN -->
-<div class="box" id="login">
-  <h1>Sparx Maths</h1>
-  <p>Please complete your homework</p>
-  <input type="password" id="password" placeholder="Enter homework code">
-  <button onclick="unlock()">Submit</button>
+<div id="login">
+  <div class="box">
+    <h1>Sparx Maths</h1>
+    <p>Enter homework code</p>
+    <input type="password" id="password" placeholder="Homework code">
+    <button onclick="unlock()">Submit</button>
+  </div>
 </div>
 
-<!-- MAIN -->
-<header id="site">Sparx Maths</header>
+<!-- SITE -->
+<div id="site">
+  <header>Sparx Maths</header>
 
-<div class="tabs" id="tabs">
-  <div class="tab active" onclick="openTab('algebra', this)">Algebra</div>
-  <div class="tab" onclick="openTab('practice', this)">Practice</div>
-  <div class="tab" onclick="openTab('sigma', this)">Σ</div>
-</div>
+  <div class="tabs">
+    <div class="tab active" onclick="openTab('algebra', this)">Algebra</div>
+    <div class="tab" onclick="openTab('practice', this)">Practice</div>
+    <div class="tab" onclick="openTab('sigma', this)">Σ</div>
+  </div>
 
-<!-- ALGEBRA -->
-<div id="algebra" class="content" style="display:block;">
-  <div class="symbol" onclick="loadGame('https://managore.itch.io/circloo')">+</div>
-  <div class="symbol" onclick="loadGame('https://jkgames.itch.io/tiny-islands')">−</div>
-  <div class="symbol" onclick="loadGame('https://hextris.itch.io/hextris')">×</div>
-  <div class="symbol" onclick="loadGame('https://backcountry.itch.io/backcountry')">÷</div>
-</div>
+  <!-- ALGEBRA -->
+  <div id="algebra" class="content" style="display:block;">
+    <div class="grid">
+      <div class="game" onclick="loadGame('https://jkgames.itch.io/circloo')">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/3/3b/Plus_symbol.svg">
+        <p>Addition</p>
+      </div>
 
-<!-- PRACTICE -->
-<div id="practice" class="content">
-  <div class="symbol" onclick="loadGame('https://cubefield.itch.io/the-cube')">√</div>
-  <div class="symbol" onclick="loadGame('https://idlegames.itch.io/idle-breakout')">π</div>
-  <div class="symbol" onclick="loadGame('https://graebor.itch.io/sort-the-court')">%</div>
-  <div class="symbol" onclick="loadGame('https://trimps.itch.io/trimps')">∞</div>
-</div>
+      <div class="game" onclick="loadGame('https://jkgames.itch.io/hextris')">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/9/99/Multiplication_symbol.svg">
+        <p>Multiplication</p>
+      </div>
 
-<!-- SIGMA -->
-<div id="sigma" class="content">
-  <div class="symbol" onclick="loadGame('https://spacebarclicker.itch.io/space-bar-clicker')">Σ</div>
-  <div class="symbol" onclick="loadGame('https://reactorincremental.itch.io/reactor-incremental')">∫</div>
-  <div class="symbol" onclick="loadGame('https://orteil.itch.io/cookie-clicker-classic')">≈</div>
-  <div class="symbol" onclick="loadGame('https://amirrajan.itch.io/a-dark-room')">Δ</div>
-</div>
+      <div class="game" onclick="loadGame('https://jkgames.itch.io/backcountry')">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/0/0f/Division_sign.svg">
+        <p>Division</p>
+      </div>
 
-<!-- LOADING -->
-<div id="loading">
-  <h2>Loading questions…</h2>
-  <div class="loader"></div>
-  <p>Please wait</p>
+      <div class="game" onclick="loadGame('https://jkgames.itch.io/tiny-islands')">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/2/2e/Equals_sign.svg">
+        <p>Equals</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- PRACTICE -->
+  <div id="practice" class="content">
+    <div class="grid">
+      <div class="game" onclick="loadGame('https://jkgames.itch.io/the-cube')">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/8/8e/Square_root_symbol.svg">
+        <p>Roots</p>
+      </div>
+
+      <div class="game" onclick="loadGame('https://jkgames.itch.io/trimps')">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/7/7e/Infinity_symbol.svg">
+        <p>Infinity</p>
+      </div>
+
+      <div class="game" onclick="loadGame('https://jkgames.itch.io/achromatic')">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/4/4c/Integral_symbol.svg">
+        <p>Integrals</p>
+      </div>
+
+      <div class="game" onclick="loadGame('https://jkgames.itch.io/line-rider')">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/6/6f/Function_symbol.svg">
+        <p>Functions</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- SIGMA -->
+  <div id="sigma" class="content">
+    <div class="grid">
+      <div class="game" onclick="loadGame('https://jkgames.itch.io/shapez')">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/1/1b/Sigma.svg">
+        <p>Σ</p>
+      </div>
+
+      <div class="game" onclick="loadGame('https://jkgames.itch.io/antiyoy')">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/e/e0/Pi_symbol.svg">
+        <p>π</p>
+      </div>
+
+      <div class="game" onclick="loadGame('https://jkgames.itch.io/maze3d')">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/5/5d/Angle_symbol.svg">
+        <p>Angles</p>
+      </div>
+
+      <div class="game" onclick="loadGame('https://jkgames.itch.io/racer')">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/4/4f/Greater_than_or_equal_to.svg">
+        <p>Inequality</p>
+      </div>
+    </div>
+  </div>
 </div>
 
 <script>
-let redirectTimer = null;
-
 function unlock() {
-  if (document.getElementById("password").value === "sparx") {
+  if (password.value === "sparx") {
     document.getElementById("login").style.display = "none";
     document.getElementById("site").style.display = "block";
-    document.getElementById("tabs").style.display = "flex";
   } else {
     alert("Incorrect homework code");
   }
 }
 
 function openTab(id, el) {
-  document.querySelectorAll('.content').forEach(c => c.style.display = 'none');
-  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-  document.getElementById(id).style.display = 'block';
-  el.classList.add('active');
+  document.querySelectorAll(".content").forEach(c => c.style.display = "none");
+  document.querySelectorAll(".tab").forEach(t => t.classList.remove("active"));
+  document.getElementById(id).style.display = "block";
+  el.classList.add("active");
 }
 
 function loadGame(url) {
-  document.getElementById("loading").style.display = "block";
-  redirectTimer = setTimeout(() => {
-    window.location.href = url;
-  }, 1600);
+  document.body.innerHTML = `
+    <div style="
+      background:#0f172a;
+      color:white;
+      height:100vh;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:24px;
+    ">
+      Loading questions…
+    </div>
+  `;
+  setTimeout(() => location.href = url, 1200);
 }
 
-/* PANIC = ENTER (ONLY WHILE LOADING) */
+/* PANIC KEY = ENTER */
 document.addEventListener("keydown", e => {
-  if (e.key === "Enter" && document.getElementById("loading").style.display === "block") {
-    clearTimeout(redirectTimer);
-    document.getElementById("loading").style.display = "none";
+  if (e.key === "Enter") {
+    location.href = "https://classroom.google.com";
   }
-});
-
-/* ENTER SUBMITS PASSWORD */
-document.getElementById("password").addEventListener("keydown", e => {
-  if (e.key === "Enter") unlock();
 });
 </script>
 
